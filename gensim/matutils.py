@@ -18,13 +18,13 @@ from gensim import utils
 import numpy as np
 import scipy.sparse
 from scipy.stats import entropy
-import scipy.linalg
+from scipy.linalg import get_blas_funcs
 from scipy.linalg.lapack import get_lapack_funcs
-from scipy.linalg.special_matrices import triu
 from scipy.special import psi  # gamma function utils
-
-from six import iteritems, itervalues, string_types
-from six.moves import xrange, zip as izip
+try:
+    from numpy import triu
+except ImportError:
+    from scipy.linalg import triu
 
 
 logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ def blas(name, ndarray):
         BLAS function for the needed operation on the given data type.
 
     """
-    return scipy.linalg.get_blas_funcs((name,), (ndarray,))[0]
+    return get_blas_funcs((name,), (ndarray,))[0]
 
 
 def argsort(x, topn=None, reverse=False):
